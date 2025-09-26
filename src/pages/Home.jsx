@@ -5,9 +5,13 @@ const Home = () => {
   const [quote, setQuote] = useState(null);
 
   const fetchQuote = async () => {
-    const res = await fetch("https://api.quotable.io/random");
-    const data = await res.json();
-    setQuote({ text: data.content, author: data.author });
+    try {
+      const res = await fetch("https://zenquotes.io/api/random");
+      const data = await res.json();
+      setQuote({ text: data[0].q, author: data[0].a });
+    } catch (error) {
+      console.error("Failed to fetch quote:", error);
+    }
   };
 
   const saveToFavorites = () => {
