@@ -6,11 +6,14 @@ const Home = () => {
 
   const fetchQuote = async () => {
     try {
-      const res = await fetch("https://zenquotes.io/api/random");
+      const res = await fetch("https://dummyjson.com/quotes/random");
+      if (!res.ok) throw new Error("Failed to fetch");
+
       const data = await res.json();
-      setQuote({ text: data[0].q, author: data[0].a });
-    } catch (error) {
-      console.error("Failed to fetch quote:", error);
+      setQuote({ text: data.quote, author: data.author });
+    } catch (err) {
+      console.error("Error fetching quote:", err);
+      setQuote({ text: "Error fetching quote", author: "System" });
     }
   };
 
@@ -25,23 +28,21 @@ const Home = () => {
   }, []);
 
   return (
-    <>
-      <div className="flex flex-col items-center mt-8">
-        {quote && (
-          <QuoteCard
-            quote={quote.text}
-            author={quote.author}
-            onSave={saveToFavorites}
-          />
-        )}
-        <button
-          onClick={fetchQuote}
-          className="mt-6 px-4 py-2 bg-green-500 text-white rounded-lg"
-        >
-          New Quote
-        </button>
-      </div>
-    </>
+    <div className="flex flex-col items-center mt-8">
+      {quote && (
+        <QuoteCard
+          quote={quote.text}
+          author={quote.author}
+          onSave={saveToFavorites}
+        />
+      )}
+      <button
+        onClick={fetchQuote}
+        className="mt-6 px-4 py-2 bg-green-500 text-white rounded-lg"
+      >
+        New Quote
+      </button>
+    </div>
   );
 };
 
